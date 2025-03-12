@@ -5,8 +5,10 @@ import tsapp
 #var(s)
 running = 0 #tracker to check if game is running
 lose = 0 #win or lose tracker
+hit_ground = 0 #tracker if player hit the ground
 score = 0 #score counter
 score_added = 0 
+highest_score = 0
 SPEED = 8 #movement speed; if changed need to change PIPE_NUM
 GRAVITY = 50 #gravity
 JUMP_PWR = 500 #jumping power
@@ -63,29 +65,31 @@ for i in range(PIPE_NUM):
     curr_pipes_top.append(pipe) #track pipes
 
 #add text to window
-text = tsapp.TextLabel('PixelifySans-Regular.ttf', window.height / 10, 0, window.height * (1 / 5), window.width, 'Press SPACE to start', tsapp.WHITE)
+text = tsapp.TextLabel('PixelifySans-Regular.ttf', window.height / 10, 0, window.height * (1 / 5), window.width, '0', tsapp.WHITE)
 text.align = 'center'
 window.add_object(text) #add text to window
 
 #main loop
 while window.is_running:
     
+    if highest_score > 0:
+        text.text = 'Highest Score: ' + str(highest_score) + '\nPress SPACE to start' #display highscore if high score is present
+    else:
+        text.text = 'Press SPACE to start' #display this text if high score is not present
+
     if not lose: #make sure bg stop moving
         move_bg(curr_sprites[0], SPEED) #move bg
         
     if tsapp.was_key_released(tsapp.K_SPACE): #logic for user to start game
         running = 1
         
-    if lose:
-        pass
-        
     while running: #game loop
             
         curr_sprites[1].y_speed += GRAVITY #make gravity
         
-        text.text = score
+        text.text = score #change text to display score
             
-        if not lose: #make sure bg stop moving
+        if not lose: #make sure bg only move if the player still alive
             move_bg(curr_sprites[0], SPEED) #move bg
             
             if tsapp.was_key_released(tsapp.K_SPACE): #logic for jumping
@@ -109,23 +113,42 @@ while window.is_running:
                     curr_pipes_top[i].x = window.width + 10
                     curr_pipes_top[i].y = pipe_y - curr_pipes_top[i].height - curr_sprites[1].height * 4 #use char's 4x height for gap between pipes 
 
-        for pipe, t_pipe in zip(curr_pipes, curr_pipes_top): #logic if player hit a pipe
+        for pipe, t_pipe in zip(curr_pipes, curr_pipes_top): #change status to lose if player hit a pipe which remove access to movement
             if curr_sprites[1].is_colliding_rect(pipe) or curr_sprites[1].is_colliding_rect(t_pipe):
                 lose = 1
             
         if curr_sprites[1].y >= window.height - curr_sprites[1].height - FLOOR_GAP: #logic if character fell
             curr_sprites[1].y_speed = 0
             curr_sprites[1].y = window.height - curr_sprites[1].height - FLOOR_GAP
+            hit_ground = 1
             running = 0
             lose = 1
         
-        window.finish_frame() #make sure frame loop even in inner loop
+        while lose and hit_ground:
+            scored_pipes = [] #reset scored pipes
+            text.text = 'Click "SPACE" to reset the game' #change text
+            if tsapp.was_key_released(tsapp.K_SPACE): #logic to reset game
+                lose = 0 #reset tracker
+                hit_ground = 0 #reset tracker
+                if score > highest_score:
+                    highest_score = score
+                score = 0 #reset score
+                curr_sprites[1].center = window.center  #reset bird position
+                for i in range(len(curr_pipes)):
+                    pipe_y = random.randint(window.height // 2, window.height - PIPE_FLOOR_GAP)
+                    curr_pipes[i].x = window.width + pipe.width * i + PIPE_GAP * i
+                    curr_pipes[i].y = pipe_y
+                    curr_pipes_top[i].x = curr_pipes[i].x
+                    curr_pipes_top[i].y = pipe_y - curr_pipes_top[i].height - curr_sprites[1].height * 4 #use char's 4x height for gap between pipes
 
-    window.finish_frame()
+            window.finish_frame() #make sure frame is generated
+
+        window.finish_frame() #make sure frame is generated
+
+    window.finish_frame() #make sure frame is generated
     
 '''
 note:
-- make game logic to reset if lose
 - make UI for score, reset, first indicator to press space, etc
 - make a function to determine bird's "tilt". if speed == 0 then tilt = 0. if speed == max then tilt = 90. if speed == gravity then tilt = -90
 - tweak the gravity and jump pwr
