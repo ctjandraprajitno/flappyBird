@@ -20,16 +20,25 @@
 
 **Solution:**  
 - Implements core Flappy Bird mechanics:
-    - Scoring System:
+    - High score:
     ```python
 
+    if highest_score > 0:
+          text.text = 'Highest Score: ' + str(highest_score) + '\nPress SPACE to start' #display highscore if high score is present
+    else:
+          text.text = 'Press SPACE to start' #display this text if high score is not present
 
-
+      ```
+    - Adding score:
+    ```python
+    if curr_sprites[1].x >= curr_pipes[i].x and curr_pipes[i] not in scored_pipes: #logic for scoring
+        score += 1
+        scored_pipes.append(curr_pipes[i]) #keep track of pipes that has been passed
     ```
     - Jump & gravity:
     ```python
 
-
+    curr_sprites[1].y_speed += GRAVITY #make gravity
 
     ```
     - Background movement:
@@ -49,7 +58,17 @@
     - Scrolling pipes:
     ```python
 
+    curr_pipes[i].x -= SPEED # move pipe
+    if curr_pipes[i].x + curr_pipes[0].width <= 0: #logic to reuse out of bound pipes 
+        pipe_y = random.randint(window.height // 2, window.height - PIPE_FLOOR_GAP)
+        curr_pipes[i].x = window.width + 10
+        curr_pipes[i].y = pipe_y #get random pipe vertical position
+        scored_pipes.remove(curr_pipes[i]) #remove pipe from scored pipes since it needs to be considered a new pipe
 
+    curr_pipes_top[i].x -= SPEED # move top pipe
+    if curr_pipes_top[i].x + curr_pipes_top[0].width <= 0: #logic to reuse out of bound pipes
+        curr_pipes_top[i].x = window.width + 10
+        curr_pipes_top[i].y = pipe_y - curr_pipes_top[i].height - curr_sprites[1].height * 4 #use char's 4x height for gap between pipes 
 
     ```
 
