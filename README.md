@@ -19,7 +19,42 @@
 ## 🛠️ Solution + ⚠️ Limitations
 
 **Solution:**  
-- Implements core Flappy Bird mechanics (gravity, jump, endless scrolling pipes, and scoring)  
+- Implements core Flappy Bird mechanics:
+    - Scoring System:
+    ```python
+
+
+
+    ```
+    - Jump & gravity:
+    ```python
+
+
+
+    ```
+    - Background movement:
+    ```python
+
+    def move_bg(curr_sprites, SPEED): #funct to move spite then reset position
+      '''
+      Args:
+          curr_sprites (obj): a sprite that's being used to be moved (background in this case)
+          SPEED (int): a constant that store the speed of the sprite's movement (background in this case)
+      '''
+      curr_sprites.center_x -= SPEED
+      if curr_sprites.x <= -curr_sprites.width / 2:
+          curr_sprites.center_x += curr_sprites.width / 2
+
+    ```
+    - Scrolling pipes:
+    ```python
+
+
+
+    ```
+
+
+(gravity, jump, endless scrolling pipes, and scoring)  
 - Uses the `tsapp` library for simplified rendering and input handling  
 
 **Current Limitations:**  

@@ -29,13 +29,13 @@ scored_pipes = [] #pipes that has been passed
 def move_bg(curr_sprites, SPEED): #funct to move spite then reset position
     '''
     Args:
-        curr_sprites (obj): a sprite or the background that's being used to be moved
-        SPEED (int): a constant that store the speed of the background's movement
+        curr_sprites (obj): a sprite that's being used to be moved (background in this case)
+        SPEED (int): a constant that store the speed of the sprite's movement (background in this case)
     '''
     curr_sprites.center_x -= SPEED
     if curr_sprites.x <= -curr_sprites.width / 2:
         curr_sprites.center_x += curr_sprites.width / 2
-help(move_bg)
+
 window = tsapp.GraphicsWindow(900, 487) #initiate window
 
 #add sprites to window
