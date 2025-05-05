@@ -73,7 +73,6 @@
     ```
 
 
-(gravity, jump, endless scrolling pipes, and scoring)  
 - Uses the `tsapp` library for simplified rendering and input handling  
 
 **Current Limitations:**  
