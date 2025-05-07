@@ -28,7 +28,7 @@
     else:
           text.text = 'Press SPACE to start' #display this text if high score is not present
 
-      ```
+    ```
     - Adding score:
     ```python
     if curr_sprites[1].x >= curr_pipes[i].x and curr_pipes[i] not in scored_pipes: #logic for scoring
