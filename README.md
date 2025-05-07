@@ -101,7 +101,7 @@
 - Fully-featured GUI overlay  
 - Animated bird tilt based on vertical velocity  
 - Sound effects and background music  
-- Main menu, high-score persistence, and difficulty levels  
+- Main menu and high-score persistence
 - Difficulty scaling according to the score
 
 ## 🗓️ Project Timeline
